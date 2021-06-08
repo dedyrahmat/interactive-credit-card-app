@@ -5,9 +5,17 @@ const CARDS = {
   mastercard: "^5[1-5]",
 };
 
+const monthsArr = Array.from({ length: 12 }, (x, i) => {
+  const month = i + 1;
+  return month <= 9 ? "0" + month : month;
+});
+
 function App() {
   const [cardName, setCardName] = useState("FULL NAME");
   const [cardNumber, setCardNumber] = useState("");
+  const [cardMonth, setCardMonth] = useState("");
+  const [cardYear, setCardYear] = useState("");
+  const [cardCVV, setCardCVV] = useState("");
 
   const checkCardType = (number) => {
     let re;
@@ -54,16 +62,18 @@ function App() {
       <div className="bg-white rounded w-1/2 left-1/4 top-1/4 absolute p-8">
         <div className="grid grid-cols-2 gap-4">
           <div className="min-w-full h-64 bg-blue-300 rounded p-6 relative">
-            {/* <div className="absolute min-w-full h-full overflow-hidden rounded top-0 left-0">
+            <div className="absolute min-w-full h-full overflow-hidden rounded top-0 left-0">
               <img
+                alt="bg"
                 src="/bg.png"
                 draggable={false}
                 className=" block object-cover w-full h-full max-w-full"
               />
-            </div> */}
+            </div>
             <div className="relative">
               <div className="flex flex-row justify-between mb-12">
                 <img
+                  alt="chip"
                   src="/chip.png"
                   draggable={false}
                   className="block w-1/6 h-auto"
@@ -85,7 +95,10 @@ function App() {
                 </div>
                 <div>
                   <label>Expiration</label>
-                  <p>MM/YY</p>
+                  <p>
+                    {!cardMonth ? "MM" : cardMonth}/
+                    {!cardYear ? "YY" : cardYear.toString().substr(-2)}
+                  </p>
                 </div>
               </div>
             </div>
@@ -122,14 +135,46 @@ function App() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-gray-600 text-sm">
-                  Expiration (mm/yy)
-                </label>
-                <input className="input" />
+                <label className="text-gray-600 text-sm">Expiration Date</label>
+                <div className="flex flex-row justify-between gap-2">
+                  <select
+                    name="cardMonth"
+                    value={cardMonth}
+                    onChange={(e) => setCardMonth(e.target.value)}
+                    className="input"
+                  >
+                    <option value="" disabled>
+                      Month
+                    </option>
+                    {monthsArr.map((val, index) => (
+                      <option key={index} value={val}>
+                        {val}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    value={cardYear}
+                    name="cardYear"
+                    onChange={(e) => setCardYear(e.target.value)}
+                    className="input"
+                    placeholder="Year"
+                    maxLength="4"
+                  />
+                </div>
               </div>
               <div>
                 <label className="text-gray-600 text-sm">Security Code</label>
-                <input className="input" />
+                <input
+                  className="input"
+                  maxLength="4"
+                  type="password"
+                  pattern="[0-9]*"
+                  inputmode="numeric"
+                  name="cardCVV"
+                  autoComplete="off"
+                  value={cardCVV}
+                  onChange={(e) => setCardCVV(e.target.value)}
+                />
               </div>
             </div>
           </div>
