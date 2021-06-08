@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+body {
+  background-color: #eff6ff !important;
+}
+.input {
+  @apply rounded border w-full py-2 px-3 outline-none;
+}
